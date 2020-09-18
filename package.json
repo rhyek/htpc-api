@@ -1,0 +1,47 @@
+{
+  "name": "htpc-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "cross-env NODE_ENV=development ts-node-dev src/main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/http-errors": "^1.6.3",
+    "@types/koa": "^2.11.0",
+    "@types/koa-helmet": "^3.1.2",
+    "@types/koa-morgan": "^1.0.4",
+    "@types/koa-router": "^7.4.0",
+    "@types/xml2js": "^0.4.5",
+    "body-parser": "^1.19.0",
+    "conf": "^4.1.0",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "http-errors": "^1.7.3",
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-helmet": "^5.2.0",
+    "koa-morgan": "^1.0.1",
+    "koa-router": "^7.4.0",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "ts-node": "^8.2.0",
+    "ts-node-dev": "^1.0.0-pre.62",
+    "typescript": "^3.7.5",
+    "winston": "^3.2.1",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/helmet": "0.0.43",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^12.0.8",
+    "prettier": "^1.18.2"
+  }
+}

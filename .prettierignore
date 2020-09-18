@@ -1,0 +1,4 @@
+lerna.json
+tsconfig.json
+*.min.js
+*.min.css
