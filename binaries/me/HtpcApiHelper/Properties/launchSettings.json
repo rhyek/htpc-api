@@ -2,7 +2,7 @@
   "profiles": {
     "HtpcApiHelper": {
       "commandName": "Project",
-      "commandLineArgs": "movecursor"
+      "commandLineArgs": "gettvscaling \\\\.\\DISPLAY3"
     }
   }
 }

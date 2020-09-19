@@ -51,7 +51,7 @@ export async function nirCmd(command: string) {
 export async function htpcApiHelper(command: string) {
   return run(
     `${getExePath(
-      'me/HtpcApiHelper/bin/Release/netcoreapp3.1/HtpcApiHelper.exe'
+      'me/HtpcApiHelper/bin/Debug/netcoreapp3.1/HtpcApiHelper.exe'
     )} ${command}`
   );
 }

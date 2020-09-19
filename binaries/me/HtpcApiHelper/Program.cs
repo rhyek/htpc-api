@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Win32;
 using CommandLine;
 using System.Runtime.InteropServices;
 
@@ -15,12 +14,25 @@ namespace HtpcApiHelper
       [Value(1, MetaName = "y", HelpText = "Y coordinate.", Required = true)]
       public int Y { get; set; }
     }
-    [Verb("gettvscaling", HelpText = "Get current TV scaling.")]
+    [Verb("getscaling", HelpText = "Get current scaling for specified display.")]
     class GetTvScalingOptions
     {
+      [Value(0, MetaName = "display", HelpText = @"Display identifier. (eg. \\.\DISPLAY1)", Required = true)]
+      public string Display { get; set; }
     }
+
     [DllImport("User32.Dll")]
     public static extern long SetCursorPos(int x, int y);
+    [DllImport("gdi32.dll")]
+    static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+    public enum DeviceCap
+    {
+      VERTRES = 10,
+      DESKTOPVERTRES = 117,
+      // http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
+    }
+    [DllImport("gdi32.dll")]
+    public static extern IntPtr CreateDC(string lpszDriver, string lpszDevice, string lpszOutput, IntPtr lpInitData);
     static int RunMoveCursor(MoveCursorOptions opts)
     {
       SetCursorPos(opts.X, opts.Y);
@@ -28,34 +40,11 @@ namespace HtpcApiHelper
     }
     static int RunGetScaling(GetTvScalingOptions opts)
     {
-      var displayId = "tv" switch
-      {
-        "tv" => "GSMC0A016843009_01_07E3_8E^D7B7748EA403516B0B3778C3BF7727BE",
-        "monitor" => "BNQ7F5EH4J00064019_10_07E2_78^A3B3E2720E9381AA9C947359FC12864C",
-        "mini" => "GSM000116843009_01_07E3_ED^65ED78C5D0A4DEF5149034EFCF5AC3D4",
-        _ => null
-      };
+      var display = CreateDC(opts.Display, "", "", IntPtr.Zero);
+      int LogicalScreenHeight = GetDeviceCaps(display, (int)DeviceCap.VERTRES);
+      int PhysicalScreenHeight = GetDeviceCaps(display, (int)DeviceCap.DESKTOPVERTRES);
 
-      if (displayId == null)
-      {
-        Console.WriteLine("Unknown display.");
-        return 1;
-      }
-
-      var selectedOption = Convert.ToInt32(Registry.GetValue($@"HKEY_CURRENT_USER\Control Panel\Desktop\PerMonitorSettings\{displayId}", "DpiValue", 0).ToString());
-      var scaling = selectedOption switch
-      {
-        -7 => 100,
-        -6 => 125,
-        -5 => 150,
-        -4 => 175,
-        -3 => 200,
-        -2 => 225,
-        -1 => 250,
-        0 => 300,
-        1 => 350,
-        _ => 100
-      };
+      float scaling = (float)PhysicalScreenHeight / (float)LogicalScreenHeight;
 
       Console.WriteLine(scaling);
       return 0;
